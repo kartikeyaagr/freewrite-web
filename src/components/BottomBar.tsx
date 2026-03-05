@@ -50,10 +50,10 @@ function BarItem({
         border: "none",
         cursor: onClick ? "pointer" : "default",
         color: active ? colors.active : colors.rest,
-        fontSize: isIcon ? 0 : 13,
+        fontSize: isIcon ? 0 : "inherit",
         fontFamily: FONT,
         letterSpacing: "0.02em",
-        padding: "2px 0",
+        padding: "4px 0",
         lineHeight: 1,
         display: "flex",
         alignItems: "center",
@@ -75,12 +75,12 @@ function BarItem({
   );
 }
 
-function Sep({ colors }: { colors: Colors }) {
+function Sep({ colors, size = 18 }: { colors: Colors; size?: number }) {
   return (
     <span
       style={{
         color: colors.sep,
-        fontSize: 18,
+        fontSize: size,
         fontFamily: FONT,
         fontWeight: 700,
         userSelect: "none",
@@ -164,7 +164,7 @@ export default function BottomBar({
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 28px",
+        padding: isMobile ? "0 16px" : "0 28px",
         userSelect: "none",
         pointerEvents: "none",
         transition: "right 280ms cubic-bezier(0.32, 0, 0.08, 1)",
@@ -175,7 +175,8 @@ export default function BottomBar({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 10,
+          gap: isMobile ? 6 : 10,
+          fontSize: isMobile ? 11 : 13,
           pointerEvents: "auto",
         }}
       >
@@ -188,7 +189,7 @@ export default function BottomBar({
         </BarItem>
         {!isMobile && (
           <>
-            <Sep colors={colors} />
+            <Sep colors={colors} size={isMobile ? 12 : 18} />
             <BarItem
               onClick={onFontFamilyChange}
               title="Cycle font"
@@ -220,7 +221,8 @@ export default function BottomBar({
         style={{
           display: "flex",
           alignItems: "center",
-          gap: 10,
+          gap: isMobile ? 6 : 10,
+          fontSize: isMobile ? 11 : 13,
           pointerEvents: "auto",
         }}
       >
@@ -237,7 +239,7 @@ export default function BottomBar({
             background: "none",
             border: "none",
             cursor: "pointer",
-            fontSize: 13,
+            fontSize: isMobile ? 11 : 13,
             fontFamily: FONT,
             letterSpacing: "0.02em",
             color: timerFinished
@@ -398,7 +400,13 @@ export default function BottomBar({
           active={!backspaceEnabled}
           colors={colors}
         >
-          {backspaceEnabled ? "Backspace is On" : "Backspace is Off"}
+          {isMobile
+            ? backspaceEnabled
+              ? "BS On"
+              : "BS Off"
+            : backspaceEnabled
+              ? "Backspace is On"
+              : "Backspace is Off"}
         </BarItem>
         <Sep colors={colors} />
         {!isMobile && (
