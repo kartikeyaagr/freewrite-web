@@ -10,6 +10,7 @@ import { useLocalStorage } from "@/hooks/useLocalStorage";
 import { useCountdown } from "@/hooks/useCountdown";
 import { useAutoSave } from "@/hooks/useAutoSave";
 import { useWritingTimer } from "@/hooks/useWritingTimer";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { supabase } from "@/lib/supabase";
 
 const FONT_SIZES = [16, 18, 20, 22, 24, 26];
@@ -62,6 +63,7 @@ my entry:`;
     loadEntry,
   } = useAutoSave(content, session);
   const { hasWrittenEnough, minutesWritten } = useWritingTimer(content);
+  const isMobile = useIsMobile();
 
   // Always start fresh on page load — no carrying over last session's content
   useEffect(() => {
@@ -120,7 +122,11 @@ my entry:`;
     navigator.clipboard.writeText(`${PROMPT_PREFIX}\n\n${content}`);
   }
 
-  const sidebarOffset = historyOpen ? 300 : 0;
+  // On mobile, sidebar takes 90vw; on desktop, fixed 300px
+  const sidebarWidth = isMobile
+    ? Math.round(window !== undefined ? window.innerWidth * 0.9 : 300)
+    : 300;
+  const sidebarOffset = historyOpen ? sidebarWidth : 0;
 
   return (
     <>
@@ -137,6 +143,7 @@ my entry:`;
         fontFamily={fontFamily}
         backspaceEnabled={backspaceEnabled}
         isLight={isLight}
+        isMobile={isMobile}
         sidebarOffset={sidebarOffset}
       />
       <BottomBar
@@ -168,11 +175,13 @@ my entry:`;
         onHistory={() => setHistoryOpen((v) => !v)}
         onCopyPrompt={handleCopyPrompt}
         isLight={isLight}
+        isMobile={isMobile}
         sidebarOffset={sidebarOffset}
       />
       <HistorySidebar
         isOpen={historyOpen}
         onClose={() => setHistoryOpen(false)}
+        isMobile={isMobile}
         session={session}
         isLight={isLight}
         onSelectEntry={(id, newContent) => {

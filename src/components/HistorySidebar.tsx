@@ -16,6 +16,7 @@ interface HistorySidebarProps {
   onSelectEntry: (id: string, content: string) => void;
   isLight: boolean;
   session: any;
+  isMobile?: boolean;
 }
 
 export default function HistorySidebar({
@@ -24,6 +25,7 @@ export default function HistorySidebar({
   onSelectEntry,
   isLight,
   session,
+  isMobile = false,
 }: HistorySidebarProps) {
   const [entries, setEntries] = useState<HistoryEntry[]>([]);
   const [loading, setLoading] = useState(false);
@@ -108,7 +110,7 @@ export default function HistorySidebar({
         top: 0,
         right: 0,
         bottom: 0,
-        width: 300,
+        width: isMobile ? "90vw" : 300,
         backgroundColor: colors.bg,
         borderLeft: `1px solid ${colors.border}`,
         backdropFilter: "blur(20px)",

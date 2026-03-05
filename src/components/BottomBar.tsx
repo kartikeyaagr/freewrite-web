@@ -115,6 +115,7 @@ interface BottomBarProps {
   saveStatus?: "idle" | "saving" | "saved" | "error";
   isLight: boolean;
   sidebarOffset?: number;
+  isMobile?: boolean;
 }
 
 export default function BottomBar({
@@ -140,6 +141,7 @@ export default function BottomBar({
   saveStatus = "idle",
   isLight,
   sidebarOffset = 0,
+  isMobile = false,
 }: BottomBarProps) {
   const colors = getColors(isLight);
   const showTimer = timerRunning || timerFinished || timerDisplay !== "15:00";
@@ -184,14 +186,18 @@ export default function BottomBar({
         >
           {fontSize}px
         </BarItem>
-        <Sep colors={colors} />
-        <BarItem
-          onClick={onFontFamilyChange}
-          title="Cycle font"
-          colors={colors}
-        >
-          {fontLabel}
-        </BarItem>
+        {!isMobile && (
+          <>
+            <Sep colors={colors} />
+            <BarItem
+              onClick={onFontFamilyChange}
+              title="Cycle font"
+              colors={colors}
+            >
+              {fontLabel}
+            </BarItem>
+          </>
+        )}
         <span
           style={{
             marginLeft: 10,
@@ -395,10 +401,14 @@ export default function BottomBar({
           {backspaceEnabled ? "Backspace is On" : "Backspace is Off"}
         </BarItem>
         <Sep colors={colors} />
-        <BarItem onClick={onFullscreen} title="Fullscreen" colors={colors}>
-          Fullscreen
-        </BarItem>
-        <Sep colors={colors} />
+        {!isMobile && (
+          <>
+            <BarItem onClick={onFullscreen} title="Fullscreen" colors={colors}>
+              Fullscreen
+            </BarItem>
+            <Sep colors={colors} />
+          </>
+        )}
         <BarItem onClick={onNewEntry} title="New entry" colors={colors}>
           New Entry
         </BarItem>

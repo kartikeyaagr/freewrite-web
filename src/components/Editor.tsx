@@ -14,6 +14,7 @@ interface EditorProps {
   backspaceEnabled?: boolean;
   isLight?: boolean;
   sidebarOffset?: number;
+  isMobile?: boolean;
 }
 
 export default function Editor({
@@ -25,6 +26,7 @@ export default function Editor({
   backspaceEnabled = true,
   isLight = false,
   sidebarOffset = 0,
+  isMobile = false,
 }: EditorProps) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -56,7 +58,7 @@ export default function Editor({
         fontSize: `${fontSize}px`,
         fontFamily,
         lineHeight: 1.7,
-        padding: "10vh 22vw",
+        padding: isMobile ? "4vh 5vw" : "10vh 22vw",
         border: "none",
         outline: "none",
         resize: "none",
