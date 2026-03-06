@@ -3,7 +3,7 @@
 import { useRef } from "react";
 
 // Height of the bottom control bar — keeps the textarea from hiding behind it
-const BOTTOM_BAR_HEIGHT = 80;
+const BOTTOM_BAR_HEIGHT = 100;
 
 interface EditorProps {
   value: string;
@@ -41,7 +41,7 @@ export default function Editor({
         }
       }}
       disabled={disabled}
-      placeholder="Just start"
+      placeholder="Just start writing"
       spellCheck={true}
       autoFocus
       style={{

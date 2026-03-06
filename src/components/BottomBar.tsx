@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Sun, History } from "lucide-react";
 
 const FONT = "'Helvetica Neue', Helvetica, Arial, sans-serif";
@@ -146,6 +146,7 @@ export default function BottomBar({
   const colors = getColors(isLight);
   const showTimer = timerRunning || timerFinished || timerDisplay !== "15:00";
   const [copied, setCopied] = useState(false);
+  const chatRef = useRef<HTMLSpanElement>(null);
 
   function handleCopy() {
     onCopyPrompt?.();
@@ -153,14 +154,26 @@ export default function BottomBar({
     setTimeout(() => setCopied(false), 2000);
   }
 
+  // Close chat popup when clicking outside
+  useEffect(() => {
+    if (!chatOpen) return;
+    function onMouseDown(e: MouseEvent) {
+      if (chatRef.current && !chatRef.current.contains(e.target as Node)) {
+        onChatToggle();
+      }
+    }
+    document.addEventListener("mousedown", onMouseDown);
+    return () => document.removeEventListener("mousedown", onMouseDown);
+  }, [chatOpen, onChatToggle]);
+
   return (
     <div
       style={{
         position: "fixed",
-        bottom: 40,
+        bottom: 56,
         left: 0,
         right: sidebarOffset,
-        height: 28,
+        height: 44,
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
@@ -168,6 +181,7 @@ export default function BottomBar({
         userSelect: "none",
         pointerEvents: "none",
         transition: "right 280ms cubic-bezier(0.32, 0, 0.08, 1)",
+        borderTop: `1px solid ${colors.sep}`,
       }}
     >
       {/* LEFT — Typography */}
@@ -261,6 +275,7 @@ export default function BottomBar({
         </button>
         <Sep colors={colors} />
         <span
+          ref={chatRef}
           style={{
             position: "relative",
             display: "inline-flex",
